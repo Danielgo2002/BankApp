@@ -7,13 +7,13 @@ export type DebtDocument = Debt & Document;
 @Schema()
 export class Debt {
 
-  @Prop({required: true})
+  @Prop()
   money: number;
 
-  @Prop({required: true})
+  @Prop()
   date: string;
 
-  @Prop({required: true})
+  @Prop()
   name: string
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Owner' })
@@ -21,4 +21,4 @@ export class Debt {
 
 }
 
-export const Accountschema = SchemaFactory.createForClass(Debt);
+export const Debtschema = SchemaFactory.createForClass(Debt);

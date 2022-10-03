@@ -7,18 +7,18 @@ export type AccountDocument = Account & Document;
 @Schema()
 export class Account {
   @Prop({required: true})
-  real_id: string;
+  real_id: string
 
   @Prop({required: true})
-  name: string;
+  name: string
 
   @Prop({required: true})
-  gmail: string;
-
-  @Prop({required: true})
-  password: string
+  gmail: string
 
   @Prop()
+  password: string
+
+  @Prop({required: true})
   hash: string
 
   @Prop({default: 0})
