@@ -1,4 +1,16 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AccountsService {}
+export class AccountsService {
+
+    Transfer(){}
+
+    
+    Deposit(){}
+
+    
+    Cashout(){}
+
+
+
+}
