@@ -7,13 +7,13 @@ import { CreateDto, SignDto } from 'src/dto/account';
 import { Account, AccountDocument } from 'src/schemas/account/acount.shema';
 @Injectable()
 export class AuthService {
-    constructor(@InjectModel('Account') private readonly Account: Model<AccountDocument>,
+    constructor(@InjectModel('Account') private readonly AccountModel: Model<AccountDocument>,
     private config: ConfigService){}
     async signup(CreateDto: CreateDto) {
         try {
           CreateDto.hash = await argon.hash(CreateDto.password);
           delete CreateDto.password
-          const user = new this.Account(CreateDto)
+          const user = new this.AccountModel(CreateDto)
           await user.save()
           return user
         } catch (error) {
@@ -23,7 +23,7 @@ export class AuthService {
     
       async signin(signDto: SignDto) {
         // find the user by email
-        const result = await this.Account.find({gmail: signDto.gmail}).exec();
+        const result = await this.AccountModel.find({gmail: signDto.gmail}).exec();
         // if user does not exist throw exception
         if (!result)
           throw new ForbiddenException(
