@@ -1,5 +1,8 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AccountsService } from './accounts.service';
+
+@UseGuards(AuthGuard('jwt'))
 
 @Controller('accounts')
 export class AccountsController {
@@ -21,4 +24,10 @@ export class AccountsController {
     Cashout(){
         return this.accountservice.Cashout()
     }
+
+    @Get('me')
+    getme(){
+        return 'user info';
+    }
+
 }
