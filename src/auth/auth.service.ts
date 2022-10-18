@@ -13,6 +13,9 @@ export class AuthService {
     private config: ConfigService, private jwt: JwtService){}
     async signup(CreateDto: CreateDto) {
         try {
+          // const existAccount = await this.AccountModel.findByUniqe)
+
+
           CreateDto.hash = await argon.hash(CreateDto.password);
           delete CreateDto.password
           const user = new this.AccountModel(CreateDto)
@@ -21,6 +24,7 @@ export class AuthService {
          } catch (error) {
               console.log(error);
             }
+          
           }
     
       async signin(signDto: SignDto) {

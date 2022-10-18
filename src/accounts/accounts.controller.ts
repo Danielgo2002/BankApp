@@ -1,5 +1,7 @@
 import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/decorator';
+import { AccountDocument } from 'src/schemas/account/acount.shema';
 import { AccountsService } from './accounts.service';
 
 @UseGuards(AuthGuard('jwt'))
@@ -26,8 +28,8 @@ export class AccountsController {
     }
 
     @Get('me')
-    getme(){
-        return 'user info';
+    getme(@GetUser() user: AccountDocument){
+        return user
     }
 
 }
