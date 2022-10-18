@@ -5,7 +5,9 @@ import { AccountModule } from './accounts/accounts.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [AuthModule, AccountModule, MongooseModule.forRoot('mongodb://localhost/nest')],
+  imports: [AuthModule, AccountModule, MongooseModule.forRoot('mongodb://localhost/nest',{
+    autoIndex :true,
+  })],
 
 })
 export class AppModule {}

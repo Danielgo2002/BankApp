@@ -13,7 +13,10 @@ export class AuthService {
     private config: ConfigService, private jwt: JwtService){}
     async signup(CreateDto: CreateDto) {
         try {
-          // const existAccount = await this.AccountModel.findByUniqe)
+          const existAccount = await this.AccountModel.findOne({gmail:CreateDto.gmail})
+          if(existAccount){
+           return 'dupllicate error'
+          }
 
 
           CreateDto.hash = await argon.hash(CreateDto.password);
