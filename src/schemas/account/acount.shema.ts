@@ -24,7 +24,7 @@ export class Account {
   @Prop({default: 0})
   money: number
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Owner' })
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sender' })
   debt: Debt[];
 
 }

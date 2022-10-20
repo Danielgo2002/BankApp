@@ -14,10 +14,10 @@ export class Debt {
   date: string;
 
   @Prop()
-  name: string
+  comment: string
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Owner' })
-  owner: Account;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sender' })
+  sender: Account;
 
 }
 
