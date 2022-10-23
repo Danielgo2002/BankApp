@@ -14,4 +14,10 @@ export class Transfer {
     @IsString()
     password: string
 
+    @IsNotEmpty()
+    date: Date
+
+    @IsNotEmpty()
+    type: string
+
 }

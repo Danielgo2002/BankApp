@@ -5,14 +5,17 @@ import { cashout, deposit, Transfer } from 'src/dto/account-functions';
 import { Account, AccountDocument } from 'src/schemas/account/acount.shema';
 import { Mongoose } from 'mongoose';
 import { GetUser } from 'src/auth/decorator';
+import { Debt, DebtDocument } from 'src/schemas/debt/debt.schema';
+import { time } from 'console';
 
 
 @Injectable()
 export class AccountsService {
-    constructor(@InjectModel('Account') private readonly AccountModel: Model<AccountDocument>,){}
+    constructor(@InjectModel('Account') private readonly AccountModel: Model<AccountDocument>,@InjectModel('Debt') private readonly DebtModel: Model<DebtDocument>){}
     
 
      async Transfer(transferDTO: Transfer, user:AccountDocument){
+        transferDTO.date = new Date();
         
         const findaccount = await this.AccountModel.findOne({gmail:transferDTO.gmail})
         if (!findaccount){
@@ -24,39 +27,58 @@ export class AccountsService {
             return 'no money sorry' 
         }
         user.money-=  transferDTO.money
-
+        
         updateaccount.money += transferDTO.money
         updateaccount.save()
-        user.save()
         
-        console.log(user);
+        const debt = new this.DebtModel(transferDTO)
+        user.debts.push(debt.id)
+        findaccount.debts.push(debt.id)
 
-        return updateaccount
+        await user.save()
+        await findaccount.save()
+        await debt.save()
+
+        
+        return ` you passed ${transferDTO.money} dollars to ${transferDTO.gmail} now you have ${user.money} left in your account`
+
+        // return updateaccount
         
 
     }
     
     async Deposit(depositDTO: deposit, user: AccountDocument){
+        depositDTO.date= new Date();
 
+        const debt = new this.DebtModel(depositDTO)
         user.money += depositDTO.money
-        user.save()
+        user.debts.push(debt._id)
+        await user.save()
+        await debt.save()
 
-        return `you have now ${user.money} in your account`
+        
+        return `you deposit at ${depositDTO.date}.amount of  ${depositDTO.money} into your account.
+        now you have ${user.money} in your account`
+
+        
 
        
     }
 
     
     async Cashout(cashoutDTO: cashout , user: AccountDocument){
-        
+        cashoutDTO.date = new Date();
+
         if(user.money < cashoutDTO.money){
             return 'you not have enough money'
         }
-
         user.money -= cashoutDTO.money
-        user.save()
+        const debt  = new this.DebtModel(cashoutDTO) 
+        user.debts.push(debt._id)
+        await user.save()
+        await debt.save()
 
-        return `you have now ${user.money} in your account`
+        return `you Cashout ${cashoutDTO.money} now you have ${user.money} in your account`
     }
 
 

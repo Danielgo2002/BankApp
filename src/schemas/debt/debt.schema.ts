@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
-import { Account } from '../account/acount.shema';
+import { Account, AccountDocument } from '../account/acount.shema';
 
 export type DebtDocument = Debt & Document;
 
@@ -11,13 +11,19 @@ export class Debt {
   money: number;
 
   @Prop()
-  date: string;
+  date: Date;
 
   @Prop()
   comment: string
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Sender' })
-  sender: Account;
+  @Prop()
+  isInCome: boolean
+
+  @Prop()
+  type: string
+  
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Account' })
+  sender: AccountDocument;
 
 }
 

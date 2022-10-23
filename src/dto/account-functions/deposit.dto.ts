@@ -13,6 +13,12 @@ export class deposit{
     @IsNotEmpty()
     @IsString()
     password: string
+
+    @IsNotEmpty()
+    date: Date
+
+    @IsNotEmpty()
+    type: string
 }
 
  

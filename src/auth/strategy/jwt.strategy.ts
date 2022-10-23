@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt',){
 
         const result = await this.AccountModel.findById(payload.sub)
         const account = result
-        if(account.hash) delete account.hash
+        delete account.hash
         return account
 
 

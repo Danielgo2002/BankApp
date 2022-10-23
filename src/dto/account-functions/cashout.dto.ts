@@ -14,5 +14,11 @@ export class cashout{
     @IsString()
     password: string
 
+    @IsNotEmpty()
+    date: Date
+
+    @IsNotEmpty()
+    type: string
+
 
 }
