@@ -23,8 +23,13 @@ export class AuthService {
           delete CreateDto.password
           const user = new this.AccountModel(CreateDto)
           await user.save()
-          return this.signToken(user.id,user.gmail)
-         } catch (error) {
+          const access_Token = await this.signToken(user.id,user.gmail)
+          const refresh_Token = await this.refreshTokens(user.id,user.gmail)
+          return {
+            access_Token,
+            refresh_Token
+          }         
+          } catch (error) {
               console.log(error);
             }
           
@@ -46,7 +51,13 @@ export class AuthService {
           throw new ForbiddenException(
             'Credentials incorrect',
           );
-          return this.signToken(user.id,user.gmail)
+          const access_Token = await this.signToken(user.id,user.gmail)
+          const refresh_Token = await this.refreshTokens(user.id,user.gmail)
+          return {
+            access_Token,
+            refresh_Token
+          }
+          
       }
 
       async signToken(
@@ -71,4 +82,32 @@ export class AuthService {
           access_token: token,
         };
       }
+
+      async refreshTokens(
+        userid : string,
+        email: string,
+        ): Promise<{ refresh_Token: string}>{
+          const payload  = {
+            sub: userid,
+            email,
+          };
+          const secret = this.config.get('REF_SECRET');
+
+          const token = await this.jwt.signAsync(
+            payload,
+            {
+              expiresIn : '1d',
+              secret: secret
+            },
+          );
+          return {
+            refresh_Token: token,
+            }
+        }
+
+        async refresh(account){
+          const access_Token = await this.signToken(account._id, account.email)
+          return access_Token
+        }
+      
 }

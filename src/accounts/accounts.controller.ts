@@ -1,10 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Allow } from 'class-validator';
 import { GetUser } from 'src/auth/decorator';
 import { cashout, deposit, Transfer } from 'src/dto/account-functions';
 import { AccountDocument } from 'src/schemas/account/acount.shema';
-import { Debt } from 'src/schemas/debt/debt.schema';
 import { AccountsService } from './accounts.service';
 
 @UseGuards(AuthGuard('jwt'))
