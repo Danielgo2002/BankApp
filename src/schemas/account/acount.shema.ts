@@ -24,6 +24,9 @@ export class Account {
   @Prop({default: 0})
   money: number
 
+  @Prop({default: false})
+  isAdmin: boolean
+
   @Prop({ type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Debt' }]})
   debts: DebtDocument[];
 
