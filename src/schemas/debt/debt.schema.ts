@@ -21,6 +21,9 @@ export class Debt {
 
   @Prop()
   type: string
+
+  @Prop()
+  reciver:string
   
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Account' })
   sender: AccountDocument;

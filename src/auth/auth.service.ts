@@ -23,10 +23,23 @@ export class AuthService {
           delete CreateDto.password
           const user = new this.AccountModel(CreateDto)
           await user.save()
-          const access_Token = await this.signToken(user.id,user.gmail)
-          const refresh_Token = await this.refreshTokens(user.id,user.gmail)
+          if (user.isAdmin){
+          const admin_access_Token = await (await this.AdminsignToken(user.id,user.gmail)).Admin_access_token
+          const admin_refresh_Token = await (await this.Admin_refresh_Tokens(user.id,user.gmail)).Admin_refresh_Token
+          return {
+            admin_access_Token,
+
+            admin_refresh_Token
+          }
+          
+          }
+          const access_Token = await (await this.signToken(user.id,user.gmail)).access_token
+          const refresh_Token = await (await this.refreshTokens(user.id,user.gmail)).refresh_Token
+          console.log(access_Token);
+          
           return {
             access_Token,
+
             refresh_Token
           }         
           } catch (error) {
@@ -51,10 +64,21 @@ export class AuthService {
           throw new ForbiddenException(
             'Credentials incorrect',
           );
-          const access_Token = await this.signToken(user.id,user.gmail)
-          const refresh_Token = await this.refreshTokens(user.id,user.gmail)
+
+        if (user.isAdmin){
+          const admin_access_Token = await (await this.AdminsignToken(user.id,user.gmail)).Admin_access_token
+          const admin_refresh_Token = await (await this.Admin_refresh_Tokens(user.id,user.gmail)).Admin_refresh_Token
+          return {
+            admin_access_Token,
+
+            admin_refresh_Token
+          }
+        }
+          const access_Token = await (await this.signToken(user.id,user.gmail)).access_token
+          const refresh_Token = await (await this.refreshTokens(user.id,user.gmail)).refresh_Token
           return {
             access_Token,
+            
             refresh_Token
           }
           
@@ -111,6 +135,59 @@ export class AuthService {
         }
 
 
-        
-      
+
+        async AdminsignToken(
+          userid: string,
+          email: string,
+        ): Promise<{ Admin_access_token: string }> {
+          const payload = {
+            sub: userid,
+            email,
+          };
+          const secret = this.config.get('AccessADMIN_SECRET');
+    
+          const token = await this.jwt.signAsync(
+            payload,
+            {
+              expiresIn: '15m',
+              secret: secret,
+            },
+          );
+    
+        return {
+          Admin_access_token: token,
+        };
+      }
+
+
+        async Admin_refresh_Tokens(
+          userid : string,
+          email: string,
+          ): Promise<{ Admin_refresh_Token: string}>{
+            const payload  = {
+            sub: userid,
+              email,
+            };
+            const secret = this.config.get('REFADMIN_SECRET');
+
+            const token = await this.jwt.signAsync(
+              payload,
+              {
+                expiresIn : '1d',
+                secret: secret
+              },
+            );
+            return {
+              Admin_refresh_Token: token,
+              }
+        }
+
+        async Admin_refresh(account){
+          const Admin_access_Token = await this.AdminsignToken(account._id, account.email)
+          return Admin_access_Token
+        }
+
+
+
+
 }

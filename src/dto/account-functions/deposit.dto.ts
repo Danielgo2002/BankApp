@@ -18,6 +18,10 @@ export class deposit{
     date: Date
 
     @IsNotEmpty()
+    @IsString()
+    reciver: string
+
+    @IsNotEmpty()
     type: string
 }
 

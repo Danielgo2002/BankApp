@@ -2,8 +2,14 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { Debt, DebtDocument } from '../debt/debt.schema';
 
+/**
+ * @description This Document define the users and allow to perform queries on the data-base
+ */
 export type AccountDocument = Account & Document;
 
+/**
+ * @description This shema define the users that log in into the bank system
+ */
 @Schema()
 export class Account {
   @Prop({required: true})

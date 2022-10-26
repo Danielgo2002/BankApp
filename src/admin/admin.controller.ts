@@ -3,22 +3,23 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorator';
 import { AccountDocument } from 'src/schemas/account/acount.shema';
 import { AdminService } from './admin.service';
-import { getAccount } from './admindto';
+import { deleteAccount, getAccount } from './admindto';
+
+@UseGuards(AuthGuard('adminjwt'))
+
 
 @Controller('admin')
 export class AdminController {
     constructor(private adminService: AdminService) {}
 
-    @UseGuards(AuthGuard('adminjwt'))
-    @Get('getAccount')
+    @Post('getAccount')
     getAccount(@GetUser() user: AccountDocument, @Body() getAccountDTO: getAccount){
         return this.adminService.getAccount(getAccountDTO,user)
     }
 
-    @UseGuards(AuthGuard('adminjwt'))
     @Post('deleteAccount')
-    deleteAccount(){
-        return this.adminService.deleteAccount()
+    deleteAccount(@GetUser() user: AccountDocument, @Body() deleteAccountDTO: getAccount){
+        return this.adminService.deleteAccount(deleteAccountDTO,user)
     }
 
 }

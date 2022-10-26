@@ -7,7 +7,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { AccountDocument } from "src/schemas/account/acount.shema";
 
 @Injectable()
-export class AccesStrategy extends PassportStrategy(Strategy,'acces-admid',){
+export class AccesStrategy extends PassportStrategy(Strategy,'adminjwt',){
     constructor(@InjectModel('Account') private readonly AccountModel: Model<AccountDocument>,config: ConfigService ) {
         super({
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
