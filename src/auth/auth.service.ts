@@ -7,10 +7,22 @@ import { Model } from 'mongoose';
 require("dotenv").config();
 import { CreateDto, SignDto } from 'src/dto/account';
 import { Account, AccountDocument } from 'src/schemas/account/acount.shema';
+
+/**
+ * @description this class "AuthService" contains all the functions that make the authentication 
+ * the constructor connect with the detabase and the jwt we made
+ */
 @Injectable()
 export class AuthService {
     constructor(@InjectModel('Account') private readonly AccountModel: Model<AccountDocument>,
     private config: ConfigService, private jwt: JwtService){}
+
+    /**
+     * @description this function signup check if the gmail we provided in the body is alredy exsist in
+     * the database  create a hash to the account check if the user is admin and save in the database 
+     * @param CreateDto the params we need to provide in the req body based on "CreateDto"
+     * @returns if no admin - normal refresh and access token if admin - admin refresh and access token
+     */
     async signup(CreateDto: CreateDto) {
         try {
           const existAccount = await this.AccountModel.findOne({gmail:CreateDto.gmail})
@@ -47,8 +59,17 @@ export class AuthService {
             }
           
           }
-    
+
+
+    /**
+     * @description this function get the email and password in the body chek if exsist in database and check
+     * if the account is admin or not 
+     * @param signDto the params we want to get in the body based on "SignDto" 
+     * @returns  access and refresh token and ADMIN access and refresh token
+     */
       async signin(signDto: SignDto) {
+        console.log(signDto);
+        
         // find the user by email
         const result = await this.AccountModel.find({gmail: signDto.gmail}).exec();
         // if user does not exist throw exception

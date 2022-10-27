@@ -9,7 +9,11 @@ import { JwtStrategy } from './strategy';
 import { RefStrategy } from './strategy/ref.Strategy';
 import { AccesStrategy, RefreshStrategy } from 'src/admin/admin.strategy';
 
-
+/**
+ * @description this module make all the bonds and imports like:(imports - connect with detabase and schema),
+ * (controller -  connect with the controller file and routes in it),
+ * (providers - the SErvice that filed the funcs and the strategys of the differnt tokens)
+ */
 @Module({
   imports: [JwtModule.register({}),MongooseModule.forFeature([{ name: Account.name, schema: Accountschema }])],
   controllers: [AuthController],

@@ -1,2 +1,2 @@
 export * from './accCreate.dto'
-export * from './accSign.sto'
+export * from './accSign.dto'

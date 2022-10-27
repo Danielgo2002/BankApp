@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/decorator';
 import { cashout, deposit, Transfer } from 'src/dto/account-functions';
 import { AccountDocument } from 'src/schemas/account/acount.shema';
 import { AccountsService } from './accounts.service';
+
+
+@UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted:true  }))
 
 /**
  * @description the "AuthGuard" determinate if request will be handle by route or not
@@ -59,7 +62,7 @@ export class AccountsController {
     /**
      * @description this route find the user we asked (my own user)
      * @param user user the "GetUser" function and make connection with the database with "AccountDocument" 
-     * @returns the user we asked based on the token we have 
+     * @returns the user we asked based on the token we have provided
      */
     @Get('me')
     getme(@GetUser() user: AccountDocument){

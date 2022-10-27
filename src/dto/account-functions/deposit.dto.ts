@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsDate, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class deposit{
 
@@ -13,11 +13,10 @@ export class deposit{
     @IsNotEmpty()
     @IsString()
     password: string
-
-    @IsNotEmpty()
+    
+    @IsDate()
     date: Date
 
-    @IsNotEmpty()
     @IsString()
     reciver: string
 

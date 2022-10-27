@@ -72,10 +72,10 @@ export class AccountsService {
     }
 
     /**
-     * @description this function 
-     * @param depositDTO 
-     * @param user 
-     * @returns 
+     * @description this function deposit ammount of money to our account based on the body
+     * @param depositDTO contains the ammount of money we want to pass the gmail and type of action(deposit)
+     * @param user use "AccountDocument" to make connection with the database
+     * @returns the date and ammount of the deposit and the updated ammount in your account. also add the action to the debt arry
      */
     async Deposit(depositDTO: deposit, user: AccountDocument){
         depositDTO.date= new Date();
@@ -95,12 +95,19 @@ export class AccountsService {
        
     }
 
-
-
-    
+    /**
+     * @description this function check the amount of money you have and the amount you want to cashout
+     * and if you have enough money the action wil execut else we will get err
+     * @param cashoutDTO the params we want to get in the req body (money,gmail,name....)
+     * @param user use the "AccountDocument" to make connection with the data base
+     * @returns 
+     */ 
     async Cashout(cashoutDTO: cashout , user: AccountDocument){
+        console.log(cashoutDTO.date);
+        
         cashoutDTO.date = new Date();
-
+        
+        console.log(cashoutDTO.date);
         if(user.money < cashoutDTO.money){
             return 'you not have enough money'
         }
