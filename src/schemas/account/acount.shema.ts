@@ -9,6 +9,8 @@ export type AccountDocument = Account & Document;
 
 /**
  * @description This shema define the users that log in into the bank system
+ * the params that the account will have in the database 
+ * also make bond with the Debt schema
  */
 @Schema()
 export class Account {

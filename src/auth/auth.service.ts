@@ -68,7 +68,6 @@ export class AuthService {
      * @returns  access and refresh token and ADMIN access and refresh token
      */
       async signin(signDto: SignDto) {
-        console.log(signDto);
         
         // find the user by email
         const result = await this.AccountModel.find({gmail: signDto.gmail}).exec();
@@ -105,6 +104,12 @@ export class AuthService {
           
       }
 
+      /**
+       * @description this function get params from the user in database and encoded params 
+       * @param userid the id of the user that signup/in in database or body
+       * @param email  the email of the user that signup/in datsbase or body
+       * @returns the access token for amount of time we defined 
+       */
       async signToken(
         userid: string,
         email: string,
@@ -128,6 +133,12 @@ export class AuthService {
         };
       }
 
+      /**
+       * @description this function get userid and email params then encoded the payload 
+       * @param userid  the id of the user that signup/in database or body
+       * @param email the email of the user that signup/in datsbase or body
+       * @returns refreshToken with the payload as jwt and to amount of time we defined
+       */
       async refreshTokens(
         userid : string,
         email: string,
@@ -150,13 +161,25 @@ export class AuthService {
             }
         }
 
+        /**
+         * @description  this function responsible to refresh the access token and access token
+         * @param account param we provide in body
+         * @returns retrun the access token
+         */
         async refresh(account){
           const access_Token = await this.signToken(account._id, account.email)
           return access_Token
         }
+        
 
 
-
+        /**
+         * @description this function get params from the body or database  this used in the signin/up if the
+         * user is Admin if it is this kind of access token will be privided
+         * @param userid the id of the user in the database or body based ion that the user is Admin 
+         * @param email the email of the user in the body or databse based in that this user is Admin
+         * @returns return Admin-access-token that fit to specific route for the Admin
+         */
         async AdminsignToken(
           userid: string,
           email: string,
@@ -181,6 +204,12 @@ export class AuthService {
       }
 
 
+      /**
+       * @description this function get id and email as params from the body, encoded the payload we provided
+       * @param userid the id of the user in the database or in the body
+       * @param email  the email of the user in database or in the body
+       * @returns the Admin-refresh-token with the payload we provided and time 
+       */
         async Admin_refresh_Tokens(
           userid : string,
           email: string,
@@ -203,11 +232,15 @@ export class AuthService {
               }
         }
 
+        
+        /**
+         * @param account param we provided
+         * @returns  the Admin Access token
+         */
         async Admin_refresh(account){
           const Admin_access_Token = await this.AdminsignToken(account._id, account.email)
           return Admin_access_Token
         }
-
 
 
 
