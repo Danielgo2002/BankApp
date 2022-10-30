@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { cashout, deposit, Transfer } from 'src/dto/account-functions';
 import {  AccountDocument } from 'src/schemas/account/acount.shema';
-import { Debt, DebtDocument } from 'src/schemas/debt/debt.schema';
+import { Debt, DebtDocument, Debtschema } from 'src/schemas/debt/debt.schema';
+import * as argon from 'argon2';
+
 
 /**
  * @description the class AccountsService contain inside the actions we can do  in the "accounts " route
@@ -54,11 +56,14 @@ export class AccountsService {
         /**
          * @description create an veriable and assign it to new DebtModel then it push the debt to debts
          * arry by the id of the user
+         * there is id for the transfer action, sender and reciver
          */
         const debt = new this.DebtModel(transferDTO)
+        debt.reciver = findaccount._id
+        debt.sender = user.id
         user.debts.push(debt.id)
         findaccount.debts.push(debt.id)
-
+        
         await user.save()
         await findaccount.save()
         await debt.save()
@@ -80,12 +85,28 @@ export class AccountsService {
     async Deposit(depositDTO: deposit, user: AccountDocument){
         depositDTO.date= new Date();
 
+
+        const pwMatches = await argon.verify(user.hash,depositDTO.password);
+        // if password incorrect throw exception
+        if (!pwMatches)
+          throw new ForbiddenException(
+            'Credentials incorrect',
+          );
+        const emailmatch = await (user.gmail == depositDTO.gmail)
+            if(!emailmatch)
+            throw new ForbiddenException(
+                'credentials incorrect'
+        )
+
+     
+        
+        
+
         const debt = new this.DebtModel(depositDTO)
         user.money += depositDTO.money
-        user.debts.push(debt._id)
+        user.debts.push(debt._id,)
         await user.save()
         await debt.save()
-
         
         return `you deposit at ${depositDTO.date}.amount of  ${depositDTO.money} into your account.
         now you have ${user.money} in your account`
@@ -103,11 +124,24 @@ export class AccountsService {
      * @returns 
      */ 
     async Cashout(cashoutDTO: cashout , user: AccountDocument){
-        console.log(cashoutDTO.date);
         
         cashoutDTO.date = new Date();
+
+        const pwMatches = await argon.verify(user.hash,cashoutDTO.password);
+        // if password incorrect throw exception
+        if (!pwMatches)
+          throw new ForbiddenException(
+            'Credentials incorrect',
+          );
         
-        console.log(cashoutDTO.date);
+        const emailmatch = await (user.gmail == cashoutDTO.gmail)
+          if(!emailmatch)
+          throw new ForbiddenException(
+              'credentials incorrect'
+      )
+
+          
+        
         if(user.money < cashoutDTO.money){
             return 'you not have enough money'
         }

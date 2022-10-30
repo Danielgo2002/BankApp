@@ -14,11 +14,8 @@ export class Transfer {
     @IsString()
     gmail: string
 
-    @IsNotEmpty()
-    @IsString()
     password: string
 
-    @IsNotEmpty()
     date: Date
 
     @IsNotEmpty()

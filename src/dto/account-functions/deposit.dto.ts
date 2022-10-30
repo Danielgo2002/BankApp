@@ -19,11 +19,7 @@ export class deposit{
     @IsString()
     password: string
     
-    @IsDate()
     date: Date
-
-    @IsString()
-    reciver: string
 
     @IsNotEmpty()
     type: string
