@@ -30,10 +30,12 @@ export class AccountsService {
          * veriable "findaccount". if there in not  account we execut not found
          */
         const findaccount = await this.AccountModel.findOne({gmail:transferDTO.gmail})
-        console.log(findaccount);
-        console.log('$$$$$$$$$$$$$$$$$$$$');
-        const pop = await findaccount.populate('debts')
-        console.log(pop);
+        // console.log(findaccount);
+        // console.log('$$$$$$$$$$$$$$$$$$$$');
+        
+        // const pop = await findaccount.populate('debts')
+
+        // console.log(pop);
         
         
         if (!findaccount){
