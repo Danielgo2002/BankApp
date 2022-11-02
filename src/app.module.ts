@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AccountModule } from './accounts/accounts.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { RedisModule } from './redis/redis.module';
 
 
 /**
@@ -12,7 +13,7 @@ import { AdminModule } from './admin/admin.module';
 @Module({
   imports: [AuthModule, AccountModule, MongooseModule.forRoot('mongodb://localhost/nest',{
     autoIndex :true,
-  }), AdminModule],
+  }), AdminModule, RedisModule],
 
 })
 export class AppModule {}

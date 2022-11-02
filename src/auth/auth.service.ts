@@ -23,8 +23,10 @@ export class AuthService {
      * @param CreateDto the params we need to provide in the req body based on "CreateDto"
      * @returns if no admin - normal refresh and access token if admin - admin refresh and access token
      */
-    async signup(CreateDto: CreateDto) {
+    async signup(CreateDto: CreateDto, session: Record<string, any>) {
         try {
+          console.log("higogg");
+          
           const existAccount = await this.AccountModel.findOne({gmail:CreateDto.gmail})
           if(existAccount){
            return 'dupllicate error'
@@ -34,6 +36,7 @@ export class AuthService {
           CreateDto.hash = await argon.hash(CreateDto.password);
           delete CreateDto.password
           const user = new this.AccountModel(CreateDto)
+          session.set(user._id)
           await user.save()
           if (user.isAdmin){
           const admin_access_Token = await (await this.AdminsignToken(user.id,user.gmail)).Admin_access_token
@@ -53,11 +56,12 @@ export class AuthService {
             access_Token,
 
             refresh_Token
-          }         
+          } 
+
           } catch (error) {
               console.log(error);
             }
-          
+                      
           }
 
 

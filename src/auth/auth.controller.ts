@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe, Session } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateDto, SignDto } from 'src/dto/account';
 import { AccountDocument } from 'src/schemas/account/acount.shema';
 import { AuthService } from './auth.service';
 import { GetUser } from './decorator';
+
+
 
 /**
  * @description "UsePipes" watch the requests in these routes and make sure that the exact information we want 
@@ -27,8 +29,8 @@ export class AuthController {
      * @returns call the func "signup" that in the "authservice" file
      */
     @Post('signup')
-    signup(@Body() CreateDto: CreateDto){
-        return this.authservice.signup(CreateDto)
+    signup(@Body() CreateDto: CreateDto, @Session() session: Record<string, any>){
+        return this.authservice.signup(CreateDto, session)
     }
 
     /**
