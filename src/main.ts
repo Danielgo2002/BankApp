@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as RedisStore from 'connect-redis';
-import redis  from 'redis';
+import Redis from 'ioredis';
 
 
 
@@ -11,11 +11,12 @@ import redis  from 'redis';
  * @description 
  */
 async function bootstrap() {
-  let redisClient = redis.createClient({ port: 6379, host: 'localhost' })
+  const redis = new Redis();
+  console.log(redis)
   const app = await NestFactory.create(AppModule);
   app.use(
     session({
-      store: new RedisStore({ client: redisClient}),
+      store: new RedisStore({ client: redis}),
       secret: 'my-secret',
       resave: false,
       saveUninitialized: false,
